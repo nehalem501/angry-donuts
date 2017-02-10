@@ -2,6 +2,6 @@
 Key-Value Objects storage.
 
 membres du groupe
-	Kevin Youna kevin.youna@gmail.com
+    Kevin Youna kevin.youna@gmail.com
     Tomek Lecocq tomek.lecocq@hotmail.fr
-karim > karimmurcielago@gmail.com
+    karim > karimmurcielago@gmail.com
