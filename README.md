@@ -8,3 +8,4 @@ membres du groupe
     Valloris cylly navarna@hotmail.fr
     nguyendavid75013@gmail.com
 
+GIT TUTO NO BULLSHIT : http://rogerdudler.github.io/git-guide/ 
