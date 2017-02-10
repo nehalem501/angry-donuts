@@ -1,0 +1,14 @@
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+# Object files
+*.[Oo]bj
+*.o
+
+# Editor temporary files
+*.swp
+*~
+
+# Binary
+src/angry-donuts
