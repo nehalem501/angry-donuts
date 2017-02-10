@@ -12,3 +12,6 @@
 
 # Binary
 src/angry-donuts
+
+# nodejs
+server/node_modules/
