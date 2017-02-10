@@ -8,4 +8,6 @@ membres du groupe
     Valloris cylly navarna@hotmail.fr
     nguyendavid75013@gmail.com
 
+To build the nodejs target, run 'npm install' from the server directory.
+
 GIT TUTO NO BULLSHIT : http://rogerdudler.github.io/git-guide/ 
