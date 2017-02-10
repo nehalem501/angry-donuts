@@ -6,4 +6,5 @@ membres du groupe
     Tomek Lecocq tomek.lecocq@hotmail.fr
     karim > karimmurcielago@gmail.com
     Valloris cylly navarna@hotmail.fr
+    nguyendavid75013@gmail.com
 
