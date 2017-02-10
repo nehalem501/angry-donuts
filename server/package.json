@@ -1,0 +1,9 @@
+{
+    "name": "angry-donuts",
+    "version": "0.0.1",
+    "description": "",
+    "main": "./index.js",
+    "dependencies": {
+        "angry-donuts-addon": "file:../src" 
+    }
+}
