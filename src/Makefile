@@ -2,7 +2,7 @@ CC = g++
 EXE_NAME = angry-donuts
 SOURCE_FILES = $(wildcard *.cpp)
 OBJ_FILES = $(SOURCE_FILES:.cpp=.o)
-CCFLAGS = -std=c++11 -Wall -pedantic
+CCFLAGS = -g -std=c++11 -Wall -pedantic
 LDFLAGS = -luuid
 
 all : $(EXE_NAME)

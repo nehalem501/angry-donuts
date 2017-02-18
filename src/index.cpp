@@ -5,7 +5,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
+#include <uuid/uuid.h>
 
+#include "status.h"
+#include "object.h"
 #include "index.h"
 
 Index::Index(char *pathname) {
@@ -21,12 +24,22 @@ Index::Index(char *pathname) {
         path.append("/");
 }
 
-void Index::put() {
+Status Index::put(uuid_t returned_id, Data *data) {
+    Status status;
+    Object object(returned_id, path, data, &status, true);
+    return status;
 }
 
-void Index::get() {
+Status Index::get(uuid_t id, Data *data) {
+    Status status;
+    Object object(id, path, &status);
+    if (status == Status::Success) {
+        object.get(data);
+    }
+    return status;
 }
 
-void Index::del() {
+Status Index::del(uuid_t id) {
+    return Status::Success;
 }
 
