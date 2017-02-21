@@ -5,9 +5,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string>
 #include <uuid/uuid.h>
 
 #include "status.h"
+#include "utils.h"
 #include "object.h"
 #include "index.h"
 
@@ -40,6 +42,12 @@ Status Index::get(uuid_t id, Data *data) {
 }
 
 Status Index::del(uuid_t id) {
-    return Status::Success;
+    std::string obj_path = get_path(id, path);
+    if (unlink(obj_path.c_str()) == 0) {
+        return Status::Success;
+    } else {
+        perror("bla bla unlink");
+        return Status::Error;
+    }
 }
 

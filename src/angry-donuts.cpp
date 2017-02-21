@@ -41,5 +41,10 @@ int main(int argc, char *argv[]) {
             std::cout << "success on put and get!" << std::endl;
     }
 
+    if (index.del(uuid) == Status::Success)
+        std::cout << "success on delete!" << std::endl;
+    else
+        std::cout << "delete error..." << std::endl;
+
     return 0;
 }
