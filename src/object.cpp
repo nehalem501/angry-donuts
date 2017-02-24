@@ -26,8 +26,9 @@ Object::Object(uuid_t id, string data_dir, Status *status) {
 // Generates a new UUID if creating a new file and write the data to the file
 // then opens it read-only mode and maps the file's content in memory
 Object::Object(uuid_t id, string data_dir, Data *d, Status *status, bool create) {
-    if (create)
+    if (create){
         uuid_generate(id);
+    }
         
     *status = Status::Error;
     path = get_path(id, data_dir);
@@ -35,7 +36,7 @@ Object::Object(uuid_t id, string data_dir, Data *d, Status *status, bool create)
     
     int fd = open(path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
     if (fd == -1) {
-        perror("bla bla open");
+        perror("Error in Object.open");
         return;
     }
     
