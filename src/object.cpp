@@ -46,6 +46,7 @@ Object::Object(uuid_t id, string data_dir, Data *d, Status *status, bool create)
         written = write(fd, data, remaining);
         if (written < 0) {
             perror("write error");
+            close(fd);
             return;
         }
         remaining -= written;
