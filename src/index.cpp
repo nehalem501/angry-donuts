@@ -21,6 +21,7 @@ Index::Index(char *pathname) {
         exit(EXIT_FAILURE);
     }
 
+    /* path ??? */
     path.insert(0, pathname);
     if (path.back() != '/')
         path.append("/");
