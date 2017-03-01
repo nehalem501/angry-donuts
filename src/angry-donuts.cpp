@@ -6,6 +6,7 @@
 #include <string.h>
 #include <uuid/uuid.h>
 
+#include "utils.h"
 #include "index.h"
 #include "status.h"
 #include "data.h"
@@ -18,6 +19,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Usage: angry-donuts /path/to/data" << std::endl;
         exit(EXIT_FAILURE);
     }
+
 
     Index index(argv[1]);
 
