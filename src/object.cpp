@@ -29,17 +29,17 @@ Object::Object(uuid_t id, string data_dir, Data *d, Status *status, bool create)
     if (create){
         uuid_generate(id);
     }
-        
+
     *status = Status::Error;
     path = get_path(id, data_dir);
     length = d->length;
-    
+
     int fd = open(path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
     if (fd == -1) {
         perror("Error in Object.open");
         return;
     }
-    
+
     int64_t written = 0;
     int64_t remaining = (int64_t) length;
     data = d->bytes;
@@ -53,40 +53,40 @@ Object::Object(uuid_t id, string data_dir, Data *d, Status *status, bool create)
         remaining -= written;
         data += written;
     }
-    
+
     close(fd);
-    
+
     open_file_read(status);
 }
 
 void Object::open_file_read(Status *status) {
     *status = Status::Error;
-    
+
     int fd = open(path.c_str(), O_RDONLY);
     if (fd == -1) {
-        perror("bla bla open");
+        perror("error_while_opening_file");
         return;
     }
 
     struct stat64 sb;
     if (fstat64(fd, &sb) == -1) {
-        perror("bla bla fstat64");
+        perror("error_while_retreive_information_about_the_file");
         return;
     }
 
     length = (uint64_t) sb.st_size;
     data = (uint8_t *) mmap(NULL, length, PROT_READ, MAP_SHARED, fd, 0);
     if (data == MAP_FAILED) {
-        perror("bla bla mmap");
+        perror("error_while_creates_new_mapping");
         return;
     }
-    
+
     *status = Status::Success;
 }
 
 Object::~Object() {
     if (munmap(data, length) != 0)
-        perror("bla bla munmap");
+        perror("error_while_systeme_call_deletes_the_mapping");
 }
 
 void Object::get(Data *data) {

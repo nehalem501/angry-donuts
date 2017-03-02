@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     Index index(argv[1]);
 
     /*  Un contenu de fichier   */
-    std::string t = "Bla bla bla!";
+    std::string t = "file content!";
 
     /*  Recuperer le char* a partir d'un String     */
     const char *test = t.c_str();
@@ -49,28 +49,35 @@ int main(int argc, char *argv[]) {
     */
     if (index.put(uuid, &data) != Status::Success)
         std::cout << "error put" << std::endl;
+        exit(EXIT_FAILURE);
 
     /* On reccupere le fichier precedant dans Data2 via sa cle uuid
         un succes est attendu car le fichier est deja reference dans l'index */
     Data data2;
     if (index.get(uuid, &data2) != Status::Success)
         std::cout << "error get" << std::endl;
+        exit(EXIT_FAILURE);
 
     /* Test de l'exacttude des donnee recuperee */
     if (length != data2.length) {
         std::cout << "error, different content (length)" << std::endl;
+        exit(EXIT_FAILURE);
     } else {
         if (memcmp(data.bytes, data2.bytes, length) != 0)
             std::cout << "error, different content (bytes)" << std::endl;
+            exit(EXIT_FAILURE);
         else
             std::cout << "success on put and get!" << std::endl;
+            exit(EXIT_FAILURE);
     }
 
     /* Suppression du fichier reference */
     if (index.del(uuid) == Status::Success)
         std::cout << "success on delete!" << std::endl;
+        exit(EXIT_FAILURE);
     else
         std::cout << "delete error..." << std::endl;
+        exit(EXIT_FAILURE);
 
     return 0;
 }

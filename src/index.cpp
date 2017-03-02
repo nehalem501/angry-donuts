@@ -47,8 +47,7 @@ Status Index::del(uuid_t id) {
     if (unlink(obj_path.c_str()) == 0) {
         return Status::Success;
     } else {
-        perror("bla bla unlink");
+        perror("error_while_deletes_a_name_from_the_filesystem");
         return Status::Error;
     }
 }
-
