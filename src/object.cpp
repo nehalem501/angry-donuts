@@ -64,20 +64,20 @@ void Object::open_file_read(Status *status) {
 
     int fd = open(path.c_str(), O_RDONLY);
     if (fd == -1) {
-        perror("error_while_opening_file");
+        perror("error while opening file");
         return;
     }
 
     struct stat64 sb;
     if (fstat64(fd, &sb) == -1) {
-        perror("error_while_retreive_information_about_the_file");
+        perror("error while retreive information about the file");
         return;
     }
 
     length = (uint64_t) sb.st_size;
     data = (uint8_t *) mmap(NULL, length, PROT_READ, MAP_SHARED, fd, 0);
     if (data == MAP_FAILED) {
-        perror("error_while_creates_new_mapping");
+        perror("error while creates new mapping");
         return;
     }
 
@@ -86,7 +86,7 @@ void Object::open_file_read(Status *status) {
 
 Object::~Object() {
     if (munmap(data, length) != 0)
-        perror("error_while_systeme_call_deletes_the_mapping");
+        perror("error while systeme call deletes the mapping");
 }
 
 void Object::get(Data *data) {
