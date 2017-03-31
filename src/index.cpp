@@ -26,6 +26,19 @@ Index::Index(char *pathname) {
         path.append("/");
 }
 
+Index::Index(std::string pathname) {
+    // Check if given path is a directory
+    struct stat s;
+    if (!(stat(pathname.c_str(), &s) == 0 && S_ISDIR(s.st_mode))) {
+        std::cout << "Error: " << pathname << " is not a directory" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    path.insert(0, pathname);
+    if (path.back() != '/')
+        path.append("/");
+}
+
 Status Index::put(uuid_t returned_id, Data *data) {
     Status status;
     Object object(returned_id, path, data, &status, true);

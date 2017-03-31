@@ -14,6 +14,7 @@ class Index {
         std::string path;
     public:
         Index(char *pathname);
+        Index(std::string pathname);
 
         Status put(uuid_t returned_id, Data *data);
         Status get(uuid_t id, Data *data);
