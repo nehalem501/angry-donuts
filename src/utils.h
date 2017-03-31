@@ -6,6 +6,8 @@
 #include <string>
 #include <uuid/uuid.h>
 
-std::string get_path(uuid_t id, std::string directory);
+namespace AngryB {
+    std::string get_path(uuid_t id, std::string directory);
+}
 
 #endif // UTILS_H

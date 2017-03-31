@@ -16,6 +16,7 @@
 #include "object.h"
 
 using namespace std;
+using namespace AngryB;
 
 // Opens a file in read-only mode and maps the file's content in memory
 Object::Object(uuid_t id, string data_dir, Status *status) {
@@ -91,4 +92,8 @@ void Object::get(Data *data) {
     data->bytes = new uint8_t[length];
     data->length = length;
     memcpy(data->bytes, this->data, length);
+}
+
+uint64_t Object::get_size() {
+    return length;
 }

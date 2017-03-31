@@ -7,10 +7,12 @@
 
 using namespace std;
 
-string get_path(uuid_t id, string directory) {
-    char path_str[37];
-    uuid_unparse(id, path_str);
-    string path(path_str);
-    directory.append(path);
-    return directory;
+namespace AngryB {
+    string get_path(uuid_t id, string directory) {
+        char path_str[37];
+        uuid_unparse(id, path_str);
+        string path(path_str);
+        directory.append(path);
+        return directory;
+    }
 }

@@ -13,6 +13,8 @@
 #include "object.h"
 #include "index.h"
 
+using namespace AngryB;
+
 Index::Index(char *pathname) {
     // Check if given path is a directory
     struct stat s;
@@ -62,5 +64,15 @@ Status Index::del(uuid_t id) {
         perror("bla bla unlink");
         return Status::Error;
     }
+}
+
+int64_t Index::get_size(uuid_t id) {
+    Status status;
+    Object object(id, path, &status);
+
+    if (status == Status::Success)
+        return (int64_t) object.get_size();
+
+    return -1;
 }
 

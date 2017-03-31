@@ -5,6 +5,8 @@
 
 #include "data.h"
 
+using namespace AngryB;
+
 Data::Data() : bytes(NULL),
                length(0) {
 }
