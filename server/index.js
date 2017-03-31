@@ -2,43 +2,46 @@ var libpath = require('path');
 var http = require('http');
 var url = require('url');
 var assert = require('assert');
-var angryd = require('angry-donuts-addon');
+var angryd = require('./angry-donuts.js');
+var express = require('express');
+var validate = require('uuid-validate');
 
 var port = 8080;
 var path = "/path/to/your/base_directory/";
 
-// Regex for testing UUIDs
-var pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-/*
-   assert(addon.test("hello") == "olleh");
-   assert(addon.test() == undefined);
-   assert(addon.test(88) == undefined);
+var app = express();
+var router = express.Router();
 
-   console.log("Hooray!  The addon worked as expected.");
-   */
 
-http.createServer(function (request, response) {
-    var uri = url.parse(request.url).pathname;
-    console.log('requested uri ' + uri);
-    var filename = libpath.join(path, uri);
+router.get('/', function(req, res) {
+    res.setHeader('Content-Type', 'text/plain');
+    res.send("No ID");
+});
 
-    libpath.exists(filename, function (exists) {
-        if (!exists) {
-            console.log('404 File Not Found: ' + filename);
-            response.writeHead(404, {
-                "Content-Type": "text/plain"
-            });
-            response.write("404 Not Found\n");
-            response.end();
-            return;
-        } else{
-            //console.log('Starting download: ' + filename);
-            //var stream = fs.createReadStream(filename, { bufferSize: 64 * 1024 });
-            //stream.pipe(response);
-        }
-    });
+router.post('/', function(req, res) {
+});
 
-}).listen(port);
+router.get('/:id', function(req, res) {
+    var id = req.params.id;
+    if (validate(id, 1)) {
+        //res.send("valid UUID"); // TODO
+        //var file = fs.createReadStream('file');
+        var file = angryd.read_stream(id);
+        file.pipe(res);
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send("Not valid ID");
+    }
+});
 
-console.log('Server listening on Port ' + port);
+router.delete('/:id', function(req, res) {
+});
+
+app.use('/storage', router);
+
+app.listen(port, function() {
+    console.log('Server listening on Port ' + port);
+});
+
+

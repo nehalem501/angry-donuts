@@ -66,6 +66,16 @@ Status Index::del(uuid_t id) {
     }
 }
 
+Status Index::get_raw(uuid_t id, Data *data) {
+    Status status;
+    Object object(id, path, &status);
+    if (status == Status::Success) {
+        // TODO
+        //object.get_raw(data);
+    }
+    return status;
+}
+
 int64_t Index::get_size(uuid_t id) {
     Status status;
     Object object(id, path, &status);

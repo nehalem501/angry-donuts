@@ -21,7 +21,8 @@ namespace AngryB {
             Status put(uuid_t returned_id, Data *data);
             Status get(uuid_t id, Data *data);
             Status del(uuid_t id);
-
+            
+            Status get_raw(uuid_t id, Data *data);
             int64_t get_size(uuid_t id);
     };
 }
