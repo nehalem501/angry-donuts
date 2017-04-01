@@ -5,4 +5,4 @@ ROOTDIR=$(cd "${0%/*}" && echo $PWD)
 cd "$ROOTDIR"
 
 mkdir -p data
-nodejs index.js
+node index.js
