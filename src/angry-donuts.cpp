@@ -21,8 +21,9 @@ using namespace std;
 size_t get_file_size(const char * fileName){
   struct stat st;
   if (stat(fileName,&st)){
-    fprintf(stderr,"stat %s %d \n",fileName,errno);
-    return EXIT_FAILURE;
+    fprintf(stderr,"stat sur %s errno : %d \n",fileName,errno);
+  
+    exit(EXIT_FAILURE);
   }
   return st.st_size;
 }
@@ -34,7 +35,6 @@ bool is_dir(const char * fileName){
     return EXIT_FAILURE;
   }
     return st.st_mode && S_IFDIR;
-  
 }
 
 void get_uiid_from_string(const char * string,unsigned char * uiid){
@@ -54,8 +54,12 @@ void get_uiid_from_string(const char * string,unsigned char * uiid){
 int main(int argc, char *argv[]) {
   std::cout << "argc "  << argc << std::endl;
   if(argc==3 || argc ==4 || argc == 5){
+    for(int i = 0;i<argc;i++){
+      cout << "index " << i << " = " <<   argv[i] << endl;
+    }
     Index index(argv[1]);
     uuid_t uuid;
+    char res[32];
     uint64_t length;
     void * mmapped_zone;
     if (!is_dir(argv[1])){
@@ -69,12 +73,12 @@ int main(int argc, char *argv[]) {
         perror("erreur lies a open\n");
         exit(EXIT_FAILURE);
       }
-      mmapped_zone = mmap(NULL, get_file_size(argv[3]), PROT_READ, MAP_PRIVATE | MAP_POPULATE, src, 0);
+      length = get_file_size(argv[3]);
+      mmapped_zone = mmap(NULL, length, PROT_READ, MAP_PRIVATE | MAP_POPULATE, src, 0);
       if(mmapped_zone == MAP_FAILED){
         perror("erreur lies a mmapped_zone PUT\n");
         exit(EXIT_FAILURE);
       }
-      length = get_file_size(argv[2]);
       Data data((uint8_t*) mmapped_zone, length);
       if(argc == 4){
         /*
@@ -89,7 +93,9 @@ int main(int argc, char *argv[]) {
               perror("erreur lies a munmap\n");
               return EXIT_FAILURE;
             }
-            std::cout << uuid << std::endl;
+            /* ne retourne rien */
+            uuid_unparse_lower(uuid,res);
+            std::cout << "uuid en base " << res <<  std::endl;
       }
       if(argc == 5){
         /*
@@ -117,43 +123,10 @@ int main(int argc, char *argv[]) {
       }
 
       if(argc == 5){
-          /*ama
+          /*
             angry-donut nom_dossier get uuid fichier 
             -> cree un fichier avec le contenu de l'uiid
           */
-     //   char * path_beginning;
-    //  ssize_t src_size;
-        /*
-        for(int i = 0;i<argc;i++){
-          cout << "index " << i << " = " <<   argv[i] << endl;
-        }
-        *
-        if(strchr(argv[1],'/')==NULL){
-          path_beginning = strcat(argv[1],"/");
-        }
-        cout << path_beginning << endl;
-        if(chdir(path_beginning)==-1){
-          perror("chdir path_beginning \n");
-          exit(EXIT_FAILURE);
-        }
-        int src = open(argv[3],O_RDONLY);
-        
-        if(src < 0 ){
-          perror("erreur open fichier src get");
-          exit(EXIT_FAILURE);
-        }
-        src_size = get_file_size(argv[3]);
-        void * mapped_zone = mmap(NULL, src_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, src, 0);
-        if(mmapped_zone == MAP_FAILED){
-          perror("erreur lies a mmapped_zone GET");
-          exit(EXIT_FAILURE);
-        }
-        
-        if(chdir("..")==-1){
-          perror("chdir ..");
-          exit(EXIT_FAILURE);
-        }
-        */
         int dst = open(argv[4],O_RDWR | O_CREAT | O_TRUNC,0644);
         if(dst < 0){
           perror("erreur open fichier dst get \n");
@@ -168,11 +141,7 @@ int main(int argc, char *argv[]) {
           perror("close dst \n");
           exit(EXIT_FAILURE);
         }
-        //close(src);
-
         exit(EXIT_SUCCESS);
-
-
       }
     }
     if (strcmp(argv[2],"del") == 0 ){
@@ -186,8 +155,6 @@ int main(int argc, char *argv[]) {
     if (argc == 2){
       std::cout << "argv[2]" << std::endl;
     }
-
-
     std::cout << "Error: missing argument" << std::endl;
         //std::cout << "Usage: angry-donuts /path/to/data" << std::endl;
     /*
