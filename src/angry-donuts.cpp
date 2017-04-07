@@ -78,12 +78,19 @@ int main(int argc, char *argv[]) {
     }
     */
     if (strcmp(argv[2],"put") == 0){
+      if(!file_exist(argv[3])){
+        std::cout << "le fichier "<< argv[3] <<" n'existe pas " << std::endl;
+        exit(EXIT_FAILURE);  
+      }
+
       int src = open(argv[3],'r');
       if(src < 0){
         perror("erreur lies a open\n");
         exit(EXIT_FAILURE);
       }
       length = get_file_size(argv[3]);
+
+
       mmapped_zone = mmap(NULL, length, PROT_READ, MAP_PRIVATE | MAP_POPULATE, src, 0);
       if(mmapped_zone == MAP_FAILED){
         perror("erreur lies a mmapped_zone PUT\n");
@@ -98,13 +105,13 @@ int main(int argc, char *argv[]) {
         if (index.put(uuid, &data) != Status::Success)
               std::cout << "error put" << std::endl;
           else
-            std::cout << uuid << std::endl;
             if(munmap(mmapped_zone,length)==-1){
               perror("erreur lies a munmap\n");
               return EXIT_FAILURE;
             }
             /* ne retourne rien */
             uuid_unparse_lower(uuid,res);
+            std::cout << "ajout en base réussi " << endl;
             std::cout << "uuid en base " << res <<  std::endl;
       }
       if(argc == 5){
