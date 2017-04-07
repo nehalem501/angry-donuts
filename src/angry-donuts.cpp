@@ -45,8 +45,6 @@ void get_uiid_from_string(const char * string,unsigned char * uiid){
     Il faut tester si l'entree est bien un uiid:
       si ça ne contient pas de slash par exemple ou de caractere speciaux.
   */
-
-
   if(uuid_parse(string,uiid) == -1){
         printf("error uuid_parse \n");
         exit(EXIT_FAILURE);
@@ -78,7 +76,7 @@ int main(int argc, char *argv[]) {
       }
       length = get_file_size(argv[2]);
       Data data((uint8_t*) mmapped_zone, length);
-      if(argc == 3){
+      if(argc == 4){
         /*
           angry-donuts nom_dossier put fichier
           -> renvoie l'uiid du nouveau fichier cree dans l'arborescence
@@ -93,7 +91,7 @@ int main(int argc, char *argv[]) {
             }
             std::cout << uuid << std::endl;
       }
-      if(argc == 4){
+      if(argc == 5){
         /*
           angry-donuts nom_dossier put uuid fichier 
           -> met a jour le fichier avec le même uiid
@@ -129,7 +127,7 @@ int main(int argc, char *argv[]) {
         for(int i = 0;i<argc;i++){
           cout << "index " << i << " = " <<   argv[i] << endl;
         }
-        int dst = open(argv[4],O_RDWR | O_CREAT | O_TRUNC,0644);
+        *
         if(strchr(argv[1],'/')==NULL){
           path_beginning = strcat(argv[1],"/");
         }
@@ -156,6 +154,7 @@ int main(int argc, char *argv[]) {
           exit(EXIT_FAILURE);
         }
         */
+        int dst = open(argv[4],O_RDWR | O_CREAT | O_TRUNC,0644);
         if(dst < 0){
           perror("erreur open fichier dst get \n");
           exit(EXIT_FAILURE);
