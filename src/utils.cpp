@@ -24,13 +24,13 @@ string get_path2 (uuid_t id , string directory ) {
   char path_str[37];
   uuid_unparse(id, path_str);
   for(int i = 0 ; i < 37 ; i ++)
-    if(path_str[i] == '-')
-      path_str =='\\'; 
+    if(path_str[i] == '-'){
+      path_str[i]='/'; 
+    }
   string path(path_str);
   directory.append(path);
   return directory;
 }
-
 // Karim -----------------------------------------------------------------------
 
 // 	Split un string avec le charactere donne en argument et renvoie un vecteur 
