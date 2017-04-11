@@ -28,7 +28,7 @@ Index::Index(char *pathname) {
 
 Status Index::put(uuid_t returned_id, Data *data) {
     Status status;
-    Object object(returned_id, path, data, &status, true);
+    Object object(returned_id, path, data, &status);
     return status;
 }
 
