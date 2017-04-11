@@ -20,16 +20,16 @@ string get_path(uuid_t id, string directory) {
 }
 
 // A tester (Il ne devrait pas y avoir de problème ) Valloris
-string get_path2 (uuid_t id , string directory ) {
+/*string get_path2 (uuid_t id , string directory ) {
   char path_str[37];
   uuid_unparse(id, path_str);
   for(int i = 0 ; i < 37 ; i ++)
     if(path_str[i] == '-')
-      path_str =='\\'; 
+      path_str =='/'; 
   string path(path_str);
   directory.append(path);
   return directory;
-}
+}*/
 
 // Karim -----------------------------------------------------------------------
 
