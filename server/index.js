@@ -7,8 +7,6 @@ var express = require('express');
 var validate = require('uuid-validate');
 
 var port = 8080;
-var path = "/path/to/your/base_directory/";
-
 
 var app = express();
 var router = express.Router();
@@ -16,7 +14,7 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
     res.setHeader('Content-Type', 'text/plain');
-    res.send("No ID");
+    res.status(404).send("No ID");
 });
 
 router.post('/', function(req, res) {
@@ -25,17 +23,27 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
     var id = req.params.id;
     if (validate(id, 1)) {
-        //res.send("valid UUID"); // TODO
-        //var file = fs.createReadStream('file');
-        var file = angryd.read_stream(id);
-        file.pipe(res);
+        var file = angryd.read_stream(id, res);
+        if (file === null) {
+            res.setHeader('Content-Type', 'text/plain');
+            res.status(404).send("Not found");
+        } else {
+            file.pipe(res);
+        }
     } else {
         res.setHeader('Content-Type', 'text/plain');
-        res.send("Not valid ID");
+        res.status(500).send("Not valid ID");
     }
 });
 
 router.delete('/:id', function(req, res) {
+    var id = req.params.id;
+    if (validate(id, 1)) {
+        angryd.del(id, res);
+    } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.status(500).send("Not valid ID");
+    }
 });
 
 app.use('/storage', router);

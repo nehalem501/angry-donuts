@@ -25,9 +25,16 @@ ObjectReadStream.prototype._read = function(n) {
 };
 
 module.exports = {
-    read_stream: function(id) {
-        return new ObjectReadStream(id);
+    read_stream: function(id, res) {
+        if (angryd.exists(id)) {
+            return new ObjectReadStream(id);
+        } else {
+            return null;
+        }
     },
+
+    del: function(id, res) {
+    }
 }
 
 //var mystream = new MyStream();
