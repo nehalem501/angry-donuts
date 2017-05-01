@@ -28,12 +28,16 @@ Index::Index(char *pathname) {
 }
 
 bool Index::exists(uuid_t id) {
+    return false;
+}
 
+bool Index::is_opened(uuid_t id) {
+    return false;
 }
 
 Status Index::put(uuid_t id, Data *data) {
     Status status;
-    Object object(id, path, data, &status, true);
+    Object object(id, path, data, &status);
     return status;
 }
 

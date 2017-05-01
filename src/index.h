@@ -16,6 +16,7 @@ class Index {
         std::vector<uuid_t> m_index;
         
         bool exists(uuid_t id);
+        bool is_opened(uuid_t id);
         
     public:
         Index(char *pathname);
