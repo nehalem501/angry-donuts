@@ -20,7 +20,7 @@ class Object {
 
     public:
         Object(uuid_t id, std::string data_dir, Status *status);
-        Object(uuid_t id, std::string data_dir, Data *d, Status *status, bool create);
+        Object(uuid_t id, std::string data_dir, Data *d, Status *status);
 
         ~Object();
 

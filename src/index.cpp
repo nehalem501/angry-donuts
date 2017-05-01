@@ -32,7 +32,6 @@ bool Index::exists(uuid_t id) {
 }
 
 Status Index::put(uuid_t id, Data *data) {
-    std::cout << "sizeof uuid: " << sizeof(id) << std::endl;
     Status status;
     Object object(id, path, data, &status, true);
     return status;
