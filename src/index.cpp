@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <uuid/uuid.h>
 
 #include "status.h"
@@ -21,15 +22,19 @@ Index::Index(char *pathname) {
         exit(EXIT_FAILURE);
     }
 
-    /* path ??? */
     path.insert(0, pathname);
     if (path.back() != '/')
         path.append("/");
 }
 
-Status Index::put(uuid_t returned_id, Data *data) {
+bool Index::exists(uuid_t id) {
+
+}
+
+Status Index::put(uuid_t id, Data *data) {
+    std::cout << "sizeof uuid: " << sizeof(id) << std::endl;
     Status status;
-    Object object(returned_id, path, data, &status, true);
+    Object object(id, path, data, &status, true);
     return status;
 }
 
