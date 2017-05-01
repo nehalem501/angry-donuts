@@ -6,13 +6,15 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-#include <vector>
+#include <list>
 #include <uuid/uuid.h>
 
 #include "status.h"
 #include "utils.h"
 #include "object.h"
 #include "index.h"
+
+using namespace AngryB;
 
 Index::Index(char *pathname) {
     // Check if given path is a directory
@@ -27,11 +29,24 @@ Index::Index(char *pathname) {
         path.append("/");
 }
 
-bool Index::exists(uuid_t id) {
-    return false;
+Entry* Index::get_entry(uuid_t id) {
+    for (Entry* e : m_index) {
+        if (uuid_compare(id, e->id) == 0)
+            return e;
+    }
+    
+    return NULL;
 }
 
-bool Index::is_opened(uuid_t id) {
+void Index::add_entry(Entry *e) {
+    m_index.push_front(e);
+}
+
+void Index::add(uuid_t id) {
+
+}
+
+bool Index::exists(uuid_t id) {
     return false;
 }
 
@@ -58,5 +73,15 @@ Status Index::del(uuid_t id) {
         perror("bla bla unlink");
         return Status::Error;
     }
+}
+
+int64_t Index::get_size(uuid_t id) {
+    Status status;
+    Object object(id, path, &status);
+
+    if (status == Status::Success)
+        return (int64_t) object.get_size();
+
+    return -1;
 }
 

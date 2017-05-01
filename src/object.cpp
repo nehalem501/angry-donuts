@@ -16,6 +16,7 @@
 #include "object.h"
 
 using namespace std;
+using namespace AngryB;
 
 // Opens a file in read-only mode and maps the file's content in memory
 Object::Object(uuid_t id, string data_dir, Status *status) {
@@ -60,20 +61,20 @@ void Object::open_file_read(Status *status) {
     
     int fd = open(path.c_str(), O_RDONLY);
     if (fd == -1) {
-        perror("bla bla open");
+        perror("open");
         return;
     }
 
     struct stat64 sb;
     if (fstat64(fd, &sb) == -1) {
-        perror("bla bla fstat64");
+        perror("fstat64");
         return;
     }
 
     length = (uint64_t) sb.st_size;
     data = (uint8_t *) mmap(NULL, length, PROT_READ, MAP_SHARED, fd, 0);
     if (data == MAP_FAILED) {
-        perror("bla bla mmap");
+        perror("mmap");
         return;
     }
     
@@ -82,11 +83,15 @@ void Object::open_file_read(Status *status) {
 
 Object::~Object() {
     if (munmap(data, length) != 0)
-        perror("bla bla munmap");
+        perror("munmap");
 }
 
 void Object::get(Data *data) {
     data->bytes = new uint8_t[length];
     data->length = length;
     memcpy(data->bytes, this->data, length);
+}
+
+uint64_t Object::get_size() {
+    return length;
 }

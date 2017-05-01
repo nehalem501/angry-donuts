@@ -8,5 +8,8 @@ Key-Value Objects storage.
 - Valloris Cylly navarna@hotmail.fr
 - Nguyen Luan nguyendavid75013@gmail.com
 
+### node.js server
+To build the nodejs target, run 'npm install' from the server directory.
+
 ### git
 GIT TUTO NO BULLSHIT : http://rogerdudler.github.io/git-guide/ 

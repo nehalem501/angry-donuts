@@ -1,0 +1,11 @@
+{
+    "name": "angry-donuts-addon",
+    "version": "0.0.1",
+    "description": "",
+    "gypfile": true,
+    "main": "./build/Release/angry-donuts-addon",
+    "dependencies": {
+        "nan": "^2.3.3"
+    }
+}
+

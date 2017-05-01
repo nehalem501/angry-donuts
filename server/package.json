@@ -1,0 +1,11 @@
+{
+  "name": "angry-donuts",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./index.js",
+  "dependencies": {
+    "angry-donuts-addon": "file:../src",
+    "express": "^4.14.1",
+    "uuid-validate": "0.0.2"
+  }
+}

@@ -15,6 +15,8 @@
 #include "status.h"
 #include "data.h"
 
+using namespace AngryB;
+
 void usage(std::string str) {
     std::cout << "Error: " << str << std::endl;
     std::cout << "Usage: angry-donuts /path/to/data" << std::endl;
