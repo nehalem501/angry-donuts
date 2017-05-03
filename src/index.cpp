@@ -16,6 +16,10 @@
 
 using namespace AngryB;
 
+Entry::Entry(uuid_t uuid, Object *obj) : object(obj), nb_opened(0), del(false) {
+    uuid_copy(id, uuid);
+}
+
 Index::Index(char *pathname) {
     // Check if given path is a directory
     struct stat s;
@@ -34,7 +38,7 @@ Entry* Index::get_entry(uuid_t id) {
         if (uuid_compare(id, e->id) == 0)
             return e;
     }
-    
+
     return NULL;
 }
 
@@ -52,27 +56,55 @@ bool Index::exists(uuid_t id) {
 
 Status Index::put(uuid_t id, Data *data) {
     Status status;
-    Object object(id, path, data, &status);
+    Entry *entry = get_entry(id);
+    if (entry != NULL) {
+        entry->object->put(id, data, &status);
+    } else {
+        Object *object = new Object(id, path, data, &status);
+        if (status == Status::Success) {
+            Entry *entry = new Entry(id, object);
+            add_entry(entry);
+        } else {
+            if (object == NULL)
+                status = Status::Error;
+        }
+    }
     return status;
 }
 
 Status Index::get(uuid_t id, Data *data) {
-    Status status;
-    Object object(id, path, &status);
-    if (status == Status::Success) {
-        object.get(data);
+    Status status = Status::Success;
+    Entry *entry = get_entry(id);
+    if (entry != NULL) {
+        entry->object->get(data);
+    } else {
+        Object *object = new Object(id, path, &status);
+        if (status == Status::Success) {
+            Entry *entry = new Entry(id, object);
+            add_entry(entry);
+            object->get(data);
+        } else {
+            if (object == NULL)
+                status = Status::Error;
+        }
     }
     return status;
 }
 
 Status Index::del(uuid_t id) {
-    std::string obj_path = get_path(id, path);
-    if (unlink(obj_path.c_str()) == 0) {
-        return Status::Success;
+    Entry *entry = get_entry(id);
+    if (entry != NULL) {
+        entry->del = true;
     } else {
-        perror("bla bla unlink");
-        return Status::Error;
+        std::string obj_path = get_path(id, path);
+        if (unlink(obj_path.c_str()) == 0) {
+            return Status::Success;
+        } else {
+            perror("unlink");
+            return Status::Error;
+        }
     }
+    return Status::Success;
 }
 
 int64_t Index::get_size(uuid_t id) {
@@ -85,3 +117,34 @@ int64_t Index::get_size(uuid_t id) {
     return -1;
 }
 
+void Index::open(uuid_t id) {
+    Status status = Status::Success;
+    Entry *entry = get_entry(id);
+    if (entry != NULL) {
+        entry->nb_opened++;
+    } else {
+        Object *object = new Object(id, path, &status);
+        if (status == Status::Success) {
+            Entry *entry = new Entry(id, object);
+            add_entry(entry);
+            entry->nb_opened++;
+        } else {
+            delete object;
+        }
+    }
+}
+
+void Index::close(uuid_t id) {
+    Entry *entry = get_entry(id);
+    if (entry != NULL) {
+        if (entry->nb_opened == 0 || entry->nb_opened == 1) {
+            m_index.remove(entry);
+            if (entry->del)
+                del(id);
+            delete entry->object;
+            delete entry;
+        } else {
+            entry->nb_opened--;
+        }
+    }
+}

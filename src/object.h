@@ -25,7 +25,8 @@ namespace AngryB {
 
             ~Object();
 
-            void get(Data *data);
+            void get(Data *d);
+            void put(uuid_t id, Data *d, Status *status);
             uint64_t get_size();
     };
 }

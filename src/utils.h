@@ -18,9 +18,9 @@ namespace AngryB {
     std::vector<std::string> split(std::string str, char c);
     std::string create_path(std::string root_path, std::vector<std::string> vec);
     void set_index_data(std::string path, Data *data);
-    Data* get_index_data(std::string path);
-    void set(uint8_t *array, unsigned int length, unsigned int position, bool value);
-    bool get(uint8_t *array, unsigned int length, unsigned int position);
+    void get_index_data(std::string path, Data *d);
+    void set(Data *d, unsigned int position, bool value);
+    bool get(Data *d, unsigned int position);
 }
 
 #endif // UTILS_H

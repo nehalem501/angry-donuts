@@ -24,19 +24,19 @@ Object::Object(uuid_t id, string data_dir, Status *status) {
     open_file_read(status);
 }
 
-// Writes the data to the file then opens it read-only mode 
+// Writes the data to the file then opens it read-only mode
 // and maps the file's content in memory
 Object::Object(uuid_t id, string data_dir, Data *d, Status *status) {
     *status = Status::Error;
     path = get_path(id, data_dir);
     length = d->length;
-    
+
     int fd = open(path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
     if (fd == -1) {
         perror("Error in Object.open");
         return;
     }
-    
+
     int64_t written = 0;
     int64_t remaining = (int64_t) length;
     data = d->bytes;
@@ -50,15 +50,15 @@ Object::Object(uuid_t id, string data_dir, Data *d, Status *status) {
         remaining -= written;
         data += written;
     }
-    
+
     close(fd);
-    
+
     open_file_read(status);
 }
 
 void Object::open_file_read(Status *status) {
     *status = Status::Error;
-    
+
     int fd = open(path.c_str(), O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -77,7 +77,7 @@ void Object::open_file_read(Status *status) {
         perror("mmap");
         return;
     }
-    
+
     *status = Status::Success;
 }
 
@@ -86,10 +86,41 @@ Object::~Object() {
         perror("munmap");
 }
 
-void Object::get(Data *data) {
-    data->bytes = new uint8_t[length];
-    data->length = length;
-    memcpy(data->bytes, this->data, length);
+void Object::get(Data *d) {
+    d->bytes = data;
+    d->length = length;
+}
+
+void Object::put(uuid_t id, Data *d, Status *status) {
+    if (munmap(data, length) != 0)
+        perror("munmap");
+
+    *status = Status::Error;
+    length = d->length;
+
+    int fd = open(path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1) {
+        perror("Error in Object.open");
+        return;
+    }
+
+    int64_t written = 0;
+    int64_t remaining = (int64_t) length;
+    data = d->bytes;
+    while (remaining) {
+        written = write(fd, data, remaining);
+        if (written < 0) {
+            perror("write error");
+            close(fd);
+            return;
+        }
+        remaining -= written;
+        data += written;
+    }
+
+    close(fd);
+
+    open_file_read(status);
 }
 
 uint64_t Object::get_size() {

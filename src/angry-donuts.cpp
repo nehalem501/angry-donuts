@@ -33,7 +33,7 @@ void get(Index *index, const char *id, const char *file) {
     uuid_t uuid;
     check_uuid(id, uuid);
 
-    Data data;    
+    Data data;
     if (index->get(uuid, &data) != Status::Success) {
         std::cout << "error get" << std::endl;
         // Print error

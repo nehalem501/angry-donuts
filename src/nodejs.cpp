@@ -49,21 +49,22 @@ NAN_METHOD(Read) {
     if (data.get(uuid, &obj) != Status::Success)
         return;
 
-    std::cout << "count: " << offset_count << std::endl;
+    //std::cout << "count: " << offset_count << std::endl;
     uint64_t buf_size = _512K;
     uint64_t offset = offset_count * buf_size;
     if (obj.length <= offset) {
         delete[] obj.bytes;
+        // TODO end here
         info.GetReturnValue().Set(Nan::Null());
         return;
     }
-    
+
     if (obj.length - offset < buf_size)
         buf_size = obj.length - offset;
 
     info.GetReturnValue().Set(Nan::CopyBuffer((const char*) obj.bytes + offset, buf_size).ToLocalChecked());
     delete[] obj.bytes;
-    std::cout << "deleted!" << std::endl;
+    //std::cout << "deleted!" << std::endl;
 }
 
 NAN_METHOD(Open) {
@@ -75,7 +76,7 @@ NAN_MODULE_INIT(Init) {
 
    Nan::Set(target, New<String>("read").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(Read)).ToLocalChecked());
-   
+
    Nan::Set(target, New<String>("open").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(Open)).ToLocalChecked());
 }

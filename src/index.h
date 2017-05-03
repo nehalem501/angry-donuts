@@ -13,12 +13,16 @@
 #include "object.h"
 
 namespace AngryB {
-    struct Entry {
-        uuid_t id;
-        Object *object;
-        int nb_opened;
+    class Entry {
+        public:
+            uuid_t id;
+            Object *object;
+            int nb_opened;
+            bool del;
+
+            Entry(uuid_t uuid, Object *obj);
     };
-    
+
     class Index {
         private:
             std::string path;
@@ -26,7 +30,7 @@ namespace AngryB {
 
             Entry* get_entry(uuid_t id);
             void add_entry(Entry *e);
-            
+
             void add(uuid_t id);
             bool exists(uuid_t id);
 
@@ -37,6 +41,9 @@ namespace AngryB {
             Status put(uuid_t id, Data *data);
             Status get(uuid_t id, Data *data);
             Status del(uuid_t id);
+
+            void open(uuid_t id);
+            void close(uuid_t id);
 
             int64_t get_size(uuid_t id);
     };
