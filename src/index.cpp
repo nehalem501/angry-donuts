@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <list>
 #include <uuid/uuid.h>
 
@@ -48,14 +49,17 @@ void Index::add_entry(Entry *e) {
 
 void Index::add(uuid_t id) {
     Data data;
-    bool create = false;
     std::string index_path = get_index_path(id, path);
     get_index_data(index_path, &data);
-    if (data.bytes == NULL)
-        create = true;
-    // TODO
-    //bool r = get_bit(&data, get_position(id));
-    //delete[] data.bytes;
+    
+    if (data.bytes == NULL) {
+        data.bytes = new uint8_t[INDEX_SIZE_BYTES];
+        memset(data.bytes, 0, INDEX_SIZE_BYTES);
+    }
+
+    set_bit(&data, get_position(id), true);
+    set_index_data(index_path, &data);
+    delete[] data.bytes;
 }
 
 bool Index::exists(uuid_t id) {
