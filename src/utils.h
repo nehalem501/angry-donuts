@@ -17,10 +17,12 @@ namespace AngryB {
     std::string get_path(uuid_t id, std::string directory);
     std::vector<std::string> split(std::string str, char c);
     std::string create_path(std::string root_path, std::vector<std::string> vec);
+    std::string get_index_path(uuid_t id, std::string directory);
+    unsigned int get_position(uuid_t id);
     void set_index_data(std::string path, Data *data);
     void get_index_data(std::string path, Data *d);
-    void set(Data *d, unsigned int position, bool value);
-    bool get(Data *d, unsigned int position);
+    void set_bit(Data *d, unsigned int position, bool value);
+    bool get_bit(Data *d, unsigned int position);
 }
 
 #endif // UTILS_H

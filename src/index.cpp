@@ -47,11 +47,27 @@ void Index::add_entry(Entry *e) {
 }
 
 void Index::add(uuid_t id) {
-
+    Data data;
+    bool create = false;
+    std::string index_path = get_index_path(id, path);
+    get_index_data(index_path, &data);
+    if (data.bytes == NULL)
+        create = true;
+    // TODO
+    //bool r = get_bit(&data, get_position(id));
+    //delete[] data.bytes;
 }
 
 bool Index::exists(uuid_t id) {
-    return false;
+    Data data;
+    std::string index_path = get_index_path(id, path);
+    get_index_data(index_path, &data);
+    if (data.bytes == NULL)
+        return false;
+    
+    bool r = get_bit(&data, get_position(id));
+    delete[] data.bytes;
+    return r;
 }
 
 Status Index::put(uuid_t id, Data *data) {

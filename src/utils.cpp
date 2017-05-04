@@ -51,6 +51,34 @@ namespace AngryB {
         return path;
     }
 
+    string get_index_path(uuid_t id, string directory) {
+        char path_str[37];
+        uuid_unparse(id, path_str);
+        string path(path_str);
+
+        vector<string> first_split = split(path, '-');
+
+        vector<string> vec;
+        vec.push_back(first_split[0].substr(0, 4));
+        vec.push_back(first_split[0].substr(4, 4));
+        vec.push_back(first_split[1]);
+        vec.push_back(first_split[2]);
+        vec.push_back(first_split[3]);
+        vec.push_back(first_split[4].substr(0, 4));
+        vec.push_back(first_split[4].substr(4, 4));
+        vec.push_back(first_split[4].substr(8, 2));
+
+        path = create_path(directory, vec);
+        path.append("/");
+
+        return path;
+    }
+
+    unsigned int get_position(uuid_t id) {
+        uint8_t *data = id;
+        return data[15];
+    }
+
     uint8_t byte[] = {
     /* 0b00000001 */ 0x01,
     /* 0b00000010 */ 0x02,
@@ -118,7 +146,7 @@ namespace AngryB {
             perror("munmap");
     }
 
-    void set(Data *d, unsigned int position, bool value) {
+    void set_bit(Data *d, unsigned int position, bool value) {
         if (position >= d->length * 8) {
             std::cout << "error: set: position greater than length of array" << std::endl;
             return;
@@ -134,7 +162,7 @@ namespace AngryB {
         }
     }
 
-    bool get(Data *d, unsigned int position) {
+    bool get_bit(Data *d, unsigned int position) {
         if (position >= d->length * 8) {
             std::cout << "error: get: position greater than length of array" << std::endl;
             return false;
