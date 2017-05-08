@@ -189,3 +189,4 @@ void Index::close(uuid_t id) {
         }
     }
 }
+

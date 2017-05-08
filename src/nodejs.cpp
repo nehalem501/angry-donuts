@@ -50,6 +50,7 @@ NAN_METHOD(Read) {
         return;
 
     //std::cout << "count: " << offset_count << std::endl;
+
     uint64_t buf_size = _512K;
     uint64_t offset = offset_count * buf_size;
     if (obj.length <= offset) {
@@ -64,6 +65,7 @@ NAN_METHOD(Read) {
 
     info.GetReturnValue().Set(Nan::CopyBuffer((const char*) obj.bytes + offset, buf_size).ToLocalChecked());
     delete[] obj.bytes;
+
     //std::cout << "deleted!" << std::endl;
 }
 
