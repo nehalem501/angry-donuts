@@ -121,13 +121,12 @@ namespace AngryB {
 
         int fd = open(path.c_str(), O_RDONLY);
         if (fd == -1) {
-            perror("open");
+            //perror("open"); File can be missing if creating index
             return;
         }
 
         struct stat sb;
         if (fstat(fd, &sb) == -1) {
-            perror("fstat");
             return;
         }
 

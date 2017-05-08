@@ -50,10 +50,11 @@ void Index::add_entry(Entry *e) {
 void Index::add(uuid_t id) {
     Data data;
     std::string index_path = get_index_path(id, path);
+
     get_index_data(index_path, &data);
-    
     if (data.bytes == NULL) {
         data.bytes = new uint8_t[INDEX_SIZE_BYTES];
+        data.length = INDEX_SIZE_BYTES;
         memset(data.bytes, 0, INDEX_SIZE_BYTES);
     }
 
@@ -82,6 +83,7 @@ Status Index::put(uuid_t id, Data *data) {
     } else {
         Object *object = new Object(id, path, data, &status);
         if (status == Status::Success) {
+            add(id);
             Entry *entry = new Entry(id, object);
             add_entry(entry);
         } else {
@@ -100,9 +102,13 @@ Status Index::get(uuid_t id, Data *data) {
     } else {
         Object *object = new Object(id, path, &status);
         if (status == Status::Success) {
-            Entry *entry = new Entry(id, object);
-            add_entry(entry);
-            object->get(data);
+            if(!exists(id)) {
+                status = Status::Error;
+            } else {
+                Entry *entry = new Entry(id, object);
+                add_entry(entry);
+                object->get(data);
+            }
         } else {
             if (object == NULL)
                 status = Status::Error;
@@ -112,7 +118,22 @@ Status Index::get(uuid_t id, Data *data) {
 }
 
 Status Index::del(uuid_t id) {
+    Data data;
+    std::string index_path = get_index_path(id, path);
+
+    get_index_data(index_path, &data);
+    if (data.bytes == NULL) { // Should not happen
+        data.bytes = new uint8_t[INDEX_SIZE_BYTES];
+        data.length = INDEX_SIZE_BYTES;
+        memset(data.bytes, 0, INDEX_SIZE_BYTES);
+    }
+
+    set_bit(&data, get_position(id), false);
+    set_index_data(index_path, &data);
+    delete[] data.bytes;
+    
     Entry *entry = get_entry(id);
+        
     if (entry != NULL) {
         entry->del = true;
     } else {
