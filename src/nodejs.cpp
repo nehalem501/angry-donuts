@@ -36,6 +36,7 @@ NAN_METHOD(Read) {
     uint64_t buf_size = _512K;
     uint64_t offset = offset_count * buf_size;
     if (data.length <= offset) {
+        std::cout << "close" << std::endl;
         stor_index.close(uuid);
         info.GetReturnValue().Set(Nan::Null());
         return;
@@ -79,6 +80,19 @@ NAN_METHOD(Exists) {
     info.GetReturnValue().Set(retval);
 }
 
+NAN_METHOD(Del) {
+    if (info.Length() < 1 || !info[0]->IsString())
+        return;
+    
+    uuid_t uuid;
+    Nan::Utf8String uuid_str(info[0]->ToString());
+    int res = uuid_parse(*uuid_str, uuid);
+    if (res == -1)
+        return;
+    
+    stor_index.del(uuid);
+}
+
 NAN_MODULE_INIT(Init) {
    Nan::Set(target, New<String>("read").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(Read)).ToLocalChecked());
@@ -88,6 +102,9 @@ NAN_MODULE_INIT(Init) {
    
    Nan::Set(target, New<String>("exists").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(Exists)).ToLocalChecked());
+   
+   Nan::Set(target, New<String>("del").ToLocalChecked(),
+        GetFunction(New<FunctionTemplate>(Del)).ToLocalChecked());
 }
 
 NODE_MODULE(angry_donuts_addon, Init)

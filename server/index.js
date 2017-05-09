@@ -23,7 +23,7 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
     var id = req.params.id;
     if (validate(id)) {
-        var file = angryd.read_stream(id, res);
+        var file = angryd.read_stream(id);
         if (file === null) {
             res.setHeader('Content-Type', 'text/plain');
             res.status(404).send("Not found");
@@ -38,15 +38,21 @@ router.get('/:id', function(req, res) {
 
 router.delete('/:id', function(req, res) {
     var id = req.params.id;
-    if (validate(id, 1)) {
-        angryd.del(id, res);
+    if (validate(id)) {
+        if (angryd.del(id)) {
+            res.setHeader('Content-Type', 'text/plain');
+            res.status(200).send("OK");
+        } else {
+            res.setHeader('Content-Type', 'text/plain');
+            res.status(404).send("Not found");
+	}
     } else {
         res.setHeader('Content-Type', 'text/plain');
         res.status(500).send("Not valid ID");
     }
 });
 
-app.use('/storage', router);
+app.use('/', router);
 
 app.listen(port, function() {
     console.log('Server listening on Port ' + port);

@@ -24,7 +24,7 @@ ObjectReadStream.prototype._read = function(n) {
 };
 
 module.exports = {
-    read_stream: function(id, res) {
+    read_stream: function(id) {
         if (angryd.exists(id)) {
             return new ObjectReadStream(id);
         } else {
@@ -32,7 +32,13 @@ module.exports = {
         }
     },
 
-    del: function(id, res) {
+    del: function(id) {
+        if (angryd.exists(id)) {
+            angryd.del(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
