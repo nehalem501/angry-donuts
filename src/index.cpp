@@ -34,6 +34,19 @@ Index::Index(char *pathname) {
         path.append("/");
 }
 
+Index::Index(std::string pathname) {
+    // Check if given path is a directory
+    struct stat s;
+    if (!(stat(pathname.c_str(), &s) == 0 && S_ISDIR(s.st_mode))) {
+        std::cout << "Error: " << pathname << " is not a directory" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    path = pathname;
+    if (path.back() != '/')
+        path.append("/");
+}
+
 Entry* Index::get_entry(uuid_t id) {
     for (Entry* e : m_index) {
         if (uuid_compare(id, e->id) == 0)
@@ -66,6 +79,7 @@ void Index::add(uuid_t id) {
 bool Index::exists(uuid_t id) {
     Data data;
     std::string index_path = get_index_path(id, path);
+    //std::cout << index_path << std::endl;
     get_index_data(index_path, &data);
     if (data.bytes == NULL)
         return false;

@@ -2,7 +2,7 @@ CC = g++
 EXE_NAME = angry-donuts
 SOURCE_FILES = $(filter-out nodejs.cpp, $(wildcard *.cpp))
 OBJ_FILES = $(SOURCE_FILES:.cpp=.o)
-CCFLAGS = -g -std=c++11 -Wall -pedantic
+CCFLAGS = -std=c++11 -Wall -pedantic
 LDFLAGS = -luuid
 
 all : $(EXE_NAME)

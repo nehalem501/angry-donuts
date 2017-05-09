@@ -32,7 +32,6 @@ namespace AngryB {
             void add_entry(Entry *e);
 
             void add(uuid_t id);
-            bool exists(uuid_t id);
 
         public:
             Index(char *pathname);
@@ -43,6 +42,7 @@ namespace AngryB {
             Status del(uuid_t id);
 
             void open(uuid_t id);
+            bool exists(uuid_t id);
             void close(uuid_t id);
 
             int64_t get_size(uuid_t id);

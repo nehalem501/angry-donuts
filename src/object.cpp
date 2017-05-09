@@ -126,7 +126,3 @@ void Object::put(uuid_t id, Data *d, Status *status) {
 uint64_t Object::get_size() {
     return length;
 }
-
-uint64_t Object::get_size() {
-    return length;
-}

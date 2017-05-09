@@ -22,7 +22,7 @@ router.post('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
     var id = req.params.id;
-    if (validate(id, 1)) {
+    if (validate(id)) {
         var file = angryd.read_stream(id, res);
         if (file === null) {
             res.setHeader('Content-Type', 'text/plain');

@@ -5,8 +5,7 @@ var Readable = require('stream').Readable;
 var ObjectReadStream = function(id, options) {
     console.log(id);
     Readable.call(this, options);
-    var l = angryd.getSize(id);
-    console.log("length: " + l);
+    //angryd.open(id);
     this.id = id;
     this.counter = 0;
 };
