@@ -1,3 +1,5 @@
+![Alt text](angry_donuts_logo_v2.jpg?raw=true "Logo")
+
 # Angry Donuts
 Key-Value Objects storage.
 
