@@ -64,7 +64,7 @@ The server only supports GET and DELETE methods.
 You need to have a recent version of node.js, the one from your distribution's repository might be too old.
 Link for node.js installation https://nodejs.org/en/download/package-manager/
 
-To build the nodejs target, run 'npm install' from the server directory.
+To build the nodejs target and install dependencies, run 'npm install' from the server directory.
 
 To run the server just run the 'start.sh' shell script. The server will run on port 8080. 
 
